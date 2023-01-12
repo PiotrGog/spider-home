@@ -1,10 +1,13 @@
 #include <Application/app.h>
+#include <Application/logger.h>
 
-#include "main.h"
+#include <main.h>
 
+#include <stm32l4xx_hal.h>
 #include <stm32l476xx.h>
 
 #include <stdint.h>
+#include <stdio.h>
 
 void turnOnRedLed();
 void turnOffRedLed();
@@ -13,12 +16,15 @@ void sleepForMs(uint32_t delay);
 
 void run()
 {
+    int loopCount = 0;
     while (1)
     {
+        info("Test log. Loop: %d", loopCount);
         turnOnRedLed();
         sleepForMs(100);
         turnOffRedLed();
-        sleepForMs(100);
+        sleepForMs(300);
+        loopCount++;
     }
 }
 
