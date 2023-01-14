@@ -29,6 +29,9 @@ int logMessageVaList(const Severity severity, const char *format, va_list args)
     case Severity_DEBUG:
         result += printf("DEBUG: ");
         break;
+    case Severity_WARNING:
+        result += printf("WARNING: ");
+        break;
     case Severity_ERROR:
         result += printf("ERROR: ");
         break;
@@ -53,6 +56,16 @@ int debug(const char *format, ...)
     va_list args;
     va_start(args, format);
     const int result = logMessageVaList(Severity_DEBUG, format, args);
+    va_end(args);
+
+    return result;
+}
+
+int warning(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    const int result = logMessageVaList(Severity_WARNING, format, args);
     va_end(args);
 
     return result;

@@ -5,6 +5,7 @@ typedef enum
 {
     Severity_INFO,
     Severity_DEBUG,
+    Severity_WARNING,
     Severity_ERROR
 } Severity;
 

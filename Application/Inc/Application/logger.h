@@ -9,6 +9,8 @@ int info(const char *format, ...);
 
 int debug(const char *format, ...);
 
+int warning(const char *format, ...);
+
 int error(const char *format, ...);
 
 #endif // __LOGGER_H__
