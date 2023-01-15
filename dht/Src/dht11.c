@@ -4,6 +4,8 @@
 
 #include <dht/dht11.h>
 
+#define DKT_DATA_BUFFER_SIZE 5
+
 Dht11 dhtConstruct(GPIO_TypeDef *port, uint16_t pin, TIM_HandleTypeDef *timer)
 {
     info("Creating DHT11 instance");
@@ -22,21 +24,23 @@ DhtResult dhtRead(const Dht11 *dht, DhtData *result)
         return readResponseResult;
     }
 
-    uint8_t dataBuffer[5] = {0, 0, 0, 0, 0};
-    const DhtResult readSensorDataResult = readSensorData(dht, dataBuffer, 5);
+    uint8_t dataBuffer[DKT_DATA_BUFFER_SIZE] = {0, 0, 0, 0, 0};
+    const DhtResult readSensorDataResult = readSensorData(dht, dataBuffer, DKT_DATA_BUFFER_SIZE);
     if (readSensorDataResult != DhtResult_Ok)
     {
         return readSensorDataResult;
     }
 
-    const DhtResult verifyDataResult = verifyData(dataBuffer, 5);
+    const DhtResult verifyDataResult = verifyData(dataBuffer, DKT_DATA_BUFFER_SIZE);
     if (verifyDataResult != DhtResult_Ok)
     {
         return verifyDataResult;
     }
 
-    result->humidity = dataBuffer[0];
-    result->temperature = dataBuffer[2];
+    const uint8_t humidityDataIndex = 0;
+    const uint8_t temperatureDataIndex = 2;
+    result->humidity = dataBuffer[humidityDataIndex];
+    result->temperature = dataBuffer[temperatureDataIndex];
 
     return DhtResult_Ok;
 }
