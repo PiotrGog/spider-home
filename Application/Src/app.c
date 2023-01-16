@@ -5,6 +5,7 @@
 
 #include <dht/dht11.h>
 
+#include <rtc.h>
 #include <tim.h>
 
 #include <stm32l476g_discovery_glass_lcd.h>
@@ -23,6 +24,7 @@ void run()
 {
     BSP_LCD_GLASS_Init();
     HAL_TIM_Base_Start(&htim2);
+    HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 1999, RTC_WAKEUPCLOCK_RTCCLK_DIV16);
 
     Dht11 dht = dhtConstruct(DHT_GPIO_Port, DHT_Pin, &htim2);
 
@@ -33,8 +35,8 @@ void run()
             readAndPrintTemperatureAndHumidity(&dht);
             joyCenterInterruptOccured = 0;
         }
-        HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-        HAL_Delay(2000);
+        HAL_SuspendTick();
+        HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
     }
 }
 
